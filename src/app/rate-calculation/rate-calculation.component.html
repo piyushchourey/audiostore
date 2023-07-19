@@ -1,0 +1,170 @@
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-10">
+            <h1 class="list_heading">{{ title | titlecase }}</h1>
+          </div>
+          <div class="col-sm-2">
+          </div>
+        </div>
+      </div><!-- /.container-fluid -->
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+
+        <div class="col-12 col-sm-12">
+            <div class="card card-dark card-tabs">
+               <div class="card-header p-0 pt-1">
+                  <ul class="nav nav-tabs" id="custom-tabs-two-tab" role="tablist">
+                     <li class="pt-2 px-3">
+                        <h3 class="card-title">{{ title | titlecase }}</h3>
+                     </li>
+                     <li class="nav-item">
+                        <a [ngClass]="tabActiveStatus=== 1 ? 'nav-link active':'nav-link'" id="custom-tabs-two-home-tab" role="tab" aria-controls="custom-tabs-two-home" aria-selected="false">Rate Calculation</a>
+                     </li>
+                     <li class="nav-item">
+                        <a [ngClass]="tabActiveStatus=== 2 ? 'nav-link active':'nav-link'" id="custom-tabs-two-profile-tab" role="tab" aria-controls="custom-tabs-two-profile" aria-selected="false">Rate Analyst</a>
+                     </li>
+                  </ul>
+               </div>
+               <div class="card-body">
+                  <div class="tab-content" id="custom-tabs-two-tabContent">
+                     <div [ngClass]="tabActiveStatus=== 1 ? 'tab-pane fade active show':'tab-pane fade'" id="custom-tabs-two-home" role="tabpanel" aria-labelledby="custom-tabs-two-home-tab">
+                        <form [formGroup]="rateCalculationForm" (ngSubmit)="onSubmit()">
+                           <div class="row">
+                              <div class="col-md-4">
+                                 <div class="form-group">
+                                    <select class="custom-select rounded-0" formControlName="clientName" id="exampleSelectRounded0">
+                                       <option value="">Select Client</option>
+                                       <option *ngFor="let client of clientList" [value]="client.id">{{client.name +' -  '+client.contactNumber}}</option>
+                                    </select>
+                                 </div>
+                              </div>
+                              <div class="col-md-4">
+                                 <button type="button" (click)="addProducts()" class="btn btn-success btn-md">Add fields</button>
+                              </div>
+                           </div>
+                           <table class="table table-sm">
+                              <thead>
+                                 <tr align="center">
+                                    <th style="width: 10px">SNo.</th>
+                                    <th style="width: 200px">Model Name</th>
+                                    <th style="width: 30px">UOM</th>
+                                    <th style="width: 80px">QTY</th>
+                                    <th style="width: 120px">Rate</th>
+                                    <th style="width: 100px">Mark +</th>
+                                    <th style="width: 100px">Mark -</th>
+                                    <th style="width: 100px">Total Price</th>
+                                    <th style="width: 50px">Action</th>
+                                 </tr>
+                              </thead>
+                              <tbody style="padding-top: 5px;"  formArrayName="productsArr">
+                                 <!-- {{ products().controls  }} -->
+                                 <tr align="center" *ngFor="let product_row of products().controls; let i=index" [formGroupName]="i">
+                                    <td>{{ i+1 }}</td>
+                                    <td>
+                                       <ng-select [items]="productList" (change)="onProductChange($event,i)" bindLabel="modelNumber" bindValue="id" [searchable] = "true" formControlName="product" placeholder="Select Product"></ng-select>
+                                       <!-- <select #mySelect class="custom-select form-control-border" formControlName="product" 
+                                       placeholder="Search Product here..." 
+                                       (change)="onProductChange(mySelect.value,i)">
+                                          <option value="">Select Product</option>
+                                          <option *ngFor="let product of productList" [value]="product.id">{{product.brand.name | titlecase}} {{product.modelNumber}}</option>
+                                       </select> -->
+                                       <!-- <select2 [data]="exampleData" ></select2> -->
+                                    </td>
+                                    <td>
+                                       <span type="text" placeholder="UOM">{{product_row.value.uom}}</span>
+                                    </td>
+                                    <td>
+                                       <input class="form-control form-control-border" type="text" placeholder="Qty"  formControlName="qty" (change)="onQtyChange($event,i)">
+                                    </td>
+                                    <td>
+                                       <input class="form-control form-control-border" formControlName="rate" type="number" placeholder="Rate" [value]="product_row.value.rate"></td>
+                                    <td>
+                                       <input class="form-control form-control-border" formControlName="mark_plus" type="number" placeholder="Mark +" (change)="onMarkChange($event,i,'plus')"></td>
+                                    <td>
+                                       <input class="form-control form-control-border" formControlName="mark_minus" type="number" placeholder="Mark -" (change)="onMarkChange($event,i,'minus')"></td>
+                                    <td>
+                                       <span style='font-family:Arial;'>&#8377;</span> {{product_row.value.total_price}}</td>
+                                    <td>
+                                       <!-- <button type="button" class="btn btn-block btn-success btn-sm">Add</button> -->
+                                       <button type="button" (click)="removeProducts(i)" class="btn btn-sm btn-danger">Remove</button>
+                                    </td>
+                                 </tr>
+                                 <tr *ngIf="products().controls.length">
+                                    <td align="right" colspan="7">Total Amount</td>
+                                    <td align="center"><span style='font-family:Arial;'>&#8377;</span> {{ totalPrice() }}</td>
+                                 </tr>
+                              </tbody>
+                           </table>
+                           <button  [disabled]="!this.submitted"  type="submit" class="btn btn-success pull-right">Next</button>
+                        </form>
+                    </div>
+                     <div [ngClass]="tabActiveStatus=== 2 ? 'tab-pane fade active show':'tab-pane fade'" id="custom-tabs-two-profile" role="tabpanel" aria-labelledby="custom-tabs-two-profile-tab">
+                        <div class="row">
+                           <table class="table table-bordered">
+                              <thead>
+                                <tr>
+                                 <th>S No.</th>
+                                 <th>Description</th>
+                                 <th>Rate</th>
+                                 <th>Qty</th>
+                                 <th>Cost Per Each</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                <ng-container *ngFor="let row of step2RAProductsListArr.productArr">
+                                  <tr>
+                                    <td (click)="row.isExpand = !row.isExpand">
+                                      <i *ngIf="!row.isExpand" class="fas fa-plus-circle"></i>
+                                      <i *ngIf="row.isExpand" class="fas fa-minus-circle"></i>
+                                    </td>
+                                    <td>{{ row.description }}</td>
+                                    <td>{{ row.total_price }}</td>
+                                    <td>1</td>
+                                    <td>{{ +row.finalCostEach }}</td>
+                                  </tr>
+                                  <tr *ngIf="row.isExpand">
+                                    <td colspan="5">
+                                      <table class="table table-sm">
+                                        <thead>
+                                          <th>Cartage @ 1 %</th>
+                                          <th>Installation Charges 10 %</th>
+                                          <th>Rate + Cartage + Installation</th>
+                                          <th>OVERHEADS & PROFIT @ 15% OF (A+B)</th>
+                                          <th>Add LWC @ 1 %</th>
+                                          <th>Rate + Other chanrges</th>
+                                        </thead>
+                                        <tbody>
+                                          <tr *ngFor="let row2 of row.otherCharges">
+                                            <td>{{ row2.cartage }}</td>
+                                            <td>{{ row2.installationCharge }}</td>
+                                            <td>{{ row2.totalWithInstallation }}</td>
+                                            <td>{{ row2.profit }}</td>
+                                            <td>{{ row2.lwc }}</td>
+                                            <td>{{ +row2.totalWithInstallation + +row2.profit + +row2.lwc | decimalWithTwoDigits }}</td>
+                                          </tr>
+                                        </tbody>
+                                      </table>
+                                    </td>
+                                  </tr>
+                                </ng-container>
+                              </tbody>
+                            </table>
+                        </div>
+                        <button type="button" class="btn btn-success pull-right" (click)="exportStep2()">Export</button>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </div>
+  
+      </section>
+      <!-- /.content -->
+  </div>
+  <!-- /.content-wrapper -->
+

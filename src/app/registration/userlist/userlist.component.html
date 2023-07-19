@@ -1,0 +1,197 @@
+<!-- <app-appheader></app-appheader>
+<app-sidebar></app-sidebar> -->
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">
+            <h1 class="list_heading">{{ title | titlecase }}</h1>
+          </div>
+          <div class="col-sm-4">
+            <div class="input-group">
+              <div class="input-group">
+                <div class="custom-file">
+                  <input type="file" class="custom-file-input" id="inputGroupFile04" 
+                   (change)="Onselectfile($event)"  name="file">
+                  <label class="custom-file-label" for="inputGroupFile04">{{ bulkUpload ? bulkUpload.name:'Choose bulk product file'}}</label>
+                </div>
+                <div class="input-group-append">
+                  <button class="btn btn-outline-secondary" type="button" [disabled]="!bulkUpload" id="inputGroupFileAddon04" (click)="onsubmitBulkUpload()">Upload</button>
+                </div>
+              </div>
+     
+              <div class="text-danger file-error" *ngIf="showerror" role="alert">Please select file</div>
+            </div>
+          </div>
+        </div>
+      </div><!-- /.container-fluid -->
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+
+        <!-- Default box -->
+        <div class="card">
+          <div class="card-body">
+            <table *ngIf="productlist.length" datatable [dtOptions]="dtOptions" class="table table-striped projects">
+                <thead>
+                    <tr>
+                        <th >ID</th>
+                        <th >Brand Name</th>
+                        <th >Category</th>
+                        <th>Subcategory</th>
+                        <th>Model Number</th>
+                        <th>MRP Price</th>
+                        <th>GST Amount</th>
+                        <th  class="text-center">Landing</th>
+                        <th  class="text-center">Image</th>
+                        <th class="text-center"> Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let product of productlist; index as i;">
+                        <td>{{product.id}}</td>
+                        <td>
+                            <a>{{ product.brand.name }}</a><br>
+                            <small class="{{ product.status==true ? 'right badge badge-succcess' : 'right badge badge-danger' }}">{{ product.status==true ? 'Active' : 'inactive' }}</small>
+                        </td>
+                        <td>
+                            <span>{{ product.category }}</span>
+                        </td>
+                        <td >
+                            <span>{{ product.subcategory }}</span>
+                        </td>
+                        <td >
+                          <span>{{ product.modelNumber }}</span>
+                        </td>
+                        <td >
+                        <span><i class="fa fa-inr" aria-hidden="true"></i>{{ product.mrpPrice }}</span>
+                        </td>
+                        <td >
+                          <span>{{ product.GSTAmount }}</span>
+                        </td>
+                        <td >
+                            <span><i class="fa fa-inr" aria-hidden="true"></i>{{ product.landing }}</span>
+                        </td>
+                        <td>
+                            <span *ngIf="product.documents">
+                              <a href="{{ product.documents }}" target="_blank">Image</a>
+                            </span>
+                        </td>
+                        <td class="project-actions text-center">
+                            <a class="btn btn-danger btn-sm" (click)="selectedUser = product" href="javascript:void(0)" 
+                            data-toggle="modal" data-target="#staticBackdrop">
+                                <i class="fas fa-trash">
+                                </i>
+                            </a>
+                            <a class="btn btn-primary btn-sm" (click)="viewDetails(product)"  href="javascript:void(0)" 
+                            data-toggle="modal" data-target="#detailsPopup">
+                                <i class="fas fa-eye">
+                                </i>
+                            </a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+          </div>
+          <!-- /.card-body -->
+        </div>
+        <!-- /.card -->
+  
+      </section>
+      <!-- /.content -->
+  </div>
+  <!-- /.content-wrapper -->
+
+<!-- <app-footer></app-footer> -->
+
+
+
+{{ productDetails }}
+
+
+<!-- Modal -->
+<div class="modal fade" id="staticBackdrop" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content" *ngIf="selectedUser">
+      <div class="modal-header">
+        <h5 class="modal-title" id="staticBackdropLabel">Delete user</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="close-user">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        Are you sure to Delete the product {{selectedUser.brand_name}} ? This action can not be reverted.
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-custom"
+         (click)="deleteproductlist(selectedUser.id)">Delete</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<!-- Modal -->
+<!-- <div class="modal fade" id="detailsPopup" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="staticBackdropLabel">Product Details</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="close-user">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-12 col-sm-6">
+              <h3 class="d-inline-block d-sm-none">wewewe</h3>
+              <div class="col-12">
+                  <img src="" class="product-image" alt="Product Image">
+              </div>
+              <div class="col-12 product-image-thumbs">
+                  <div class="product-image-thumb"><img src="../../dist/img/prod-1.jpg" alt="Product Image"></div>
+                  <div class="product-image-thumb"><img src="../../dist/img/prod-2.jpg" alt="Product Image"></div>
+                  <div class="product-image-thumb"><img src="../../dist/img/prod-3.jpg" alt="Product Image"></div>
+                  <div class="product-image-thumb"><img src="../../dist/img/prod-4.jpg" alt="Product Image"></div>
+                  <div class="product-image-thumb active"><img src="../../dist/img/prod-5.jpg" alt="Product Image">
+                  </div>
+              </div>
+          </div>
+          <div class="col-12 col-sm-6">
+              <h3 class="my-3">{{productDetails.modelNumber}} </h3>
+              <hr>
+              <div class="bg-gray py-2 px-3 mt-4">
+                  <h2 class="mb-0">
+                    <i class="fa fa-inr"></i>{{productDetails.mrpPrice}} 
+                  </h2>
+                  <h4 class="mt-0">
+                      <small>Ex Tax: $80.00 </small>
+                  </h4>
+              </div>
+          </div>
+      </div>
+      <div class="row mt-4">
+          <nav class="w-100">
+              <div class="nav nav-tabs" id="product-tab" role="tablist">
+                  <a class="nav-item nav-link active" id="product-desc-tab" data-toggle="tab" href="#product-desc"
+                      role="tab" aria-controls="product-desc" aria-selected="true">Description</a>
+                  <a class="nav-item nav-link" id="product-comments-tab" data-toggle="tab" href="#product-comments"
+                      role="tab" aria-controls="product-comments" aria-selected="false">Item Remark</a>
+              </div>
+          </nav>
+          <div class="tab-content p-3" id="nav-tabContent">
+              <div class="tab-pane fade show active" id="product-desc" role="tabpanel"
+                  aria-labelledby="product-desc-tab"> {{productDetails.description}} </div>
+              <div class="tab-pane fade" id="product-comments" role="tabpanel" aria-labelledby="product-comments-tab">
+                {{productDetails.itemRemark}} </div>
+          </div>
+      </div>
+      </div>
+    </div>
+  </div>
+</div> -->

@@ -1,0 +1,166 @@
+<!-- <app-appheader></app-appheader>
+<app-sidebar></app-sidebar> -->
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">
+            <h1 class="list_heading">{{ title | titlecase }}</h1>
+          </div>
+          <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+              <li class="breadcrumb-item"><a href="#">Home</a></li>
+              <li class="breadcrumb-item active">{{ title | titlecase }}</li>
+            </ol>
+          </div>
+        </div>
+      </div><!-- /.container-fluid -->
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+      <div class="container-fluid">
+        <!-- SELECT2 EXAMPLE -->
+        <div class="card card-gray-dark">
+          <div class="card-header">
+            <h3 class="card-title">{{ title | titlecase }} Form</h3>
+          </div>
+          <!-- /.card-header -->
+          <form [formGroup]="registrationForm" (ngSubmit)="register()">
+            <div class="card-body">
+              <div class="row">
+                <div class="col-md-3">
+                  <div class="form-group">
+                    <label for="exampleInputEmail1">Client Name</label>
+                    <input type="text" class="form-control" id="name" 
+                    placeholder="Enter Client Name" formControlName="name"
+                    [ngClass]="{ 'is-invalid':  submited && f.name.errors }">
+                    <div *ngIf=" submited && f.name.errors " class="invalid-feedback">
+                      <div *ngIf="submited && f.name.errors.required">Name is required</div>
+                  </div>
+                
+                  </div>
+                </div>
+                
+                <div class="col-md-3">
+                  <div class="form-group">
+                    <label for="exampleInputPassword1">Project Type</label>
+                    <input type="text" class="form-control" id="exampleInputPassword1" 
+                    placeholder="Enter Project Type" formControlName="projectType"
+                    [ngClass]="{ 'is-invalid':  submited && f.projectType.errors }">
+                    <div *ngIf=" submited && f.projectType.errors " class="invalid-feedback">
+                      <div *ngIf="submited && f.projectType.errors.required">Project Type is required</div>
+                  </div>
+                 </div>
+                </div>
+
+                <div class="col-md-3">
+                    <div class="form-group">
+                      <label for="exampleInputEmail1">Choose Date</label>
+                      <input type="date" class="form-control" id="exampleInputEmail1"
+                      placeholder="Enter date"formControlName="date"
+                      [ngClass]="{ 'is-invalid':  submited && f.date.errors }">
+                      <div *ngIf=" submited && f.date.errors " class="invalid-feedback">
+                        <div *ngIf="submited && (f.date.errors.required ||  f.date.errors.date)">Date is required</div>
+                    </div>
+                   </div>
+                </div>
+
+                <div class="col-md-3">
+                  <div class="form-group">
+                    <label for="exampleInputPassword1">State</label>
+                       <select formControlName="state" class="form-control select2" (change)="getCityByState($event)" style="width: 100%;" [ngClass]="{ 'is-invalid':  submited && f.state.errors }">
+                        <option value="">Select State</option>
+                        <option *ngFor="let state of statelist" value="{{state.id}}">{{state.name}}</option>
+                      </select>
+                      <div *ngIf=" submited && f.state.errors " class="invalid-feedback">
+                        <div *ngIf="submited && f.state.errors.required">State is required</div>
+                   </div>
+                 </div>
+                </div>
+
+                <div class="col-md-3">
+                  <div class="form-group">
+                    <label for="exampleInputPassword1">City</label>
+                      <select formControlName="city" class="form-control select2"  style="width: 100%;" [ngClass]="{ 'is-invalid':  submited && f.city.errors }">
+                        <option value="">Select City</option>
+                        <option *ngFor="let city of citylist" value="{{city.id}}">{{city.name}}</option>
+                      </select>
+                      <div *ngIf=" submited && f.city.errors " class="invalid-feedback">
+                        <div *ngIf="submited && f.city.errors.required">City is required</div>
+                   </div>
+                 </div>
+                </div>
+
+                <div class="col-md-3">
+                  <div class="form-group">
+                    <label for="exampleInputPassword1">Approx Cost</label>
+                    <input type="text" class="form-control" id="approxCost"
+                    placeholder="Enter Approx Cost"formControlName="approxCost"
+                    [ngClass]="{ 'is-invalid':  submited && f.approxCost.errors }">
+                     <div *ngIf=" submited && f.approxCost.errors " class="invalid-feedback">
+                       <div *ngIf="submited && (f.approxCost.errors.required)">Approx Cost is required</div>
+                       <div *ngIf="submited && f.approxCost.errors.pattern">Enter only digits.</div>                   </div>
+                 </div>
+                </div>
+
+                <div class="col-md-3">
+                  <div class="form-group">
+                    <label for="exampleInputPassword1">Reference Number</label>
+                    <input type="text" class="form-control" id="refNumber"
+                     placeholder="Enter Reference Number" formControlName="refNumber"
+                     [ngClass]="{ 'is-invalid':  submited && f.refNumber.errors }">
+                     <div *ngIf=" submited && f.refNumber.errors " class="invalid-feedback">
+                       <div *ngIf="submited && (f.refNumber.errors.required)">Reference Number is required</div>
+                       <div *ngIf="submited && f.refNumber.errors.pattern">Enter only digits.</div>
+                   </div>
+                 </div>
+                </div>
+
+                <div class="col-md-3">
+                  <div class="form-group">
+                    <label for="exampleInputPassword1">Refer By</label>
+                    <input type="text" class="form-control" id="uidai"
+                     placeholder="Enter Refer By" formControlName="refBy"
+                     [ngClass]="{ 'is-invalid':  submited && f.refBy.errors }">
+                     <div *ngIf=" submited && f.refBy.errors " class="invalid-feedback">
+                       <div *ngIf="submited && (f.refBy.errors.required || 
+                       f.refBy.errors.pattern || f.refBy.errors.minlength
+                       ||f.refBy.errors.maxlength)">Refer By is required</div>
+                       <!-- <div *ngIf="submited && f.aadhar_card_number.errors.pattern">Aadhar card Number  is required</div> -->
+                   </div>
+                 </div>
+                </div>
+
+                <div class="col-md-3">
+                    <div class="form-group">
+                      <label for="exampleInputPassword1">Contact Number</label>
+                      <input type="text" class="form-control" id="uidai"
+                       placeholder="Enter Contact Number" formControlName="contactNumber"
+                       [ngClass]="{ 'is-invalid':  submited && f.contactNumber.errors }">
+                       <div *ngIf=" submited && f.contactNumber.errors " class="invalid-feedback">
+                         <div *ngIf="submited && (f.contactNumber.errors.required)">Contact Number is required</div>
+                         <div *ngIf="submited && f.contactNumber.errors.pattern">Enter 10 digit Mobile Number.</div>
+                     </div>
+                   </div>
+                </div>
+
+              </div>
+            </div>
+            <!-- /.card-body -->
+            <div class="card-footer">
+               <button type="submit" class="btn btn-custom">Add Client</button>
+            </div>
+          </form>
+        </div>
+        <!-- /.card -->
+      </div>
+      <!-- /.container-fluid -->
+    </section>
+    <!-- /.content -->
+  </div>
+  <!-- /.content-wrapper -->
+<!-- 
+<app-footer></app-footer> -->
