@@ -36,6 +36,15 @@
                      <div [ngClass]="tabActiveStatus=== 1 ? 'tab-pane fade active show':'tab-pane fade'" id="custom-tabs-two-home" role="tabpanel" aria-labelledby="custom-tabs-two-home-tab">
                         <form [formGroup]="rateCalculationForm" (ngSubmit)="onSubmit()">
                            <div class="row">
+                              <div class="col-md-3">
+                                 <div class="form-group">
+                                    <select class="custom-select rounded-0" formControlName="isRARequired" id="isRARequired">
+                                       <option value="">Select IS RA Required</option>
+                                       <option value="1">Yes</option>
+                                       <option value="0">No</option>
+                                      </select>
+                                 </div>
+                              </div>
                               <div class="col-md-4">
                                  <div class="form-group">
                                     <select class="custom-select rounded-0" formControlName="clientName" id="exampleSelectRounded0">
@@ -126,7 +135,7 @@
                                     <td>{{ row.description }}</td>
                                     <td>{{ row.total_price }}</td>
                                     <td>1</td>
-                                    <td>{{ +row.finalCostEach }}</td>
+                                    <td>{{ +row.finalCostEach > 0 ? +row.finalCostEach : "N/A" }}</td>
                                   </tr>
                                   <tr *ngIf="row.isExpand">
                                     <td colspan="5">

@@ -24,6 +24,7 @@ export class RateCalculationComponent implements OnInit {
   ngOnInit(): void {
     this.title = "Rate Calculation"
     this.rateCalculationForm = this.formBuilder.group({
+      isRARequired:['', [Validators.required]],
       clientName: ['', [Validators.required]],
       totalPrice: [''],
       productsArr: this.formBuilder.array([]) ,
