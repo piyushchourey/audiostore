@@ -56,25 +56,37 @@ onSubmit() {
   // this.api.showNotification('success','Logeed in Succesfully.')
   // this.router.navigate([returnUrl]);
 
-  this.api.postData('login/',{email: this.f.email.value, password:this.f.password.value},'post').subscribe(res => {
-    console.log(res);
-    if(res['accessToken'] != null) {
-      this.api.loader('stop')
-      localStorage.setItem('currentUser', JSON.stringify(res));
-      const returnUrl = this.route.snapshot.queryParams['returnUrl'] 
-        || (res.role == "super_admin"?'dashboard':'dashboard');
-      // this.submited = false;
+  this.api.postData('login/', { email: this.f.email.value, password: this.f.password.value }, 'post')
+  .subscribe(
+    (res) => {
+      console.log(res);
+      if (res['accessToken'] != null) {
+        // Handle successful login response
+        this.api.loader('stop');
+        localStorage.setItem('currentUser', JSON.stringify(res));
+        const returnUrl = this.route.snapshot.queryParams['returnUrl']
+          || (res.role == "super_admin" ? 'dashboard' : 'dashboard');
         this.router.navigate([returnUrl]);
-
-      this.api.showNotification('success', 'Logged in successfully.');
-    }else{      
-      this.api.showNotification('error', res['message']);
-      this.api.loader('stop')
-
-      // this.updateFormdata({})
-      
+        this.api.showNotification('success', 'Logged in successfully.');
+      } else {
+        this.api.showNotification('error', res['message']);
+        this.api.loader('stop');
+      }
+    },
+    (error) => {
+      if (error.status === 401) {
+        // Handle 401 Unauthorized error
+        this.api.loader('stop');
+        this.api.showNotification('error', 'Unauthorized: Please check your credentials.');
+      } else {
+        // Handle other types of errors
+        console.error('An error occurred:', error);
+        this.api.loader('stop');
+        this.api.showNotification('error', 'An error occurred while logging in.');
+      }
     }
-    })
+  );
+
   // this.authenticationService.login(this.f.email.value, this.f.password.value)
   //     .pipe(first())
   //     .subscribe({

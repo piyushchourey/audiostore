@@ -23,7 +23,7 @@ export class UserlistComponent implements OnInit {
   // thus we ensure the data is fetched before rendering
   dtOptions: DataTables.Settings = {};
   dtTrigger: Subject<any> = new Subject<any>();
-  productDetails: any;
+  productDetails: any = {};
   constructor(private route: ActivatedRoute,private api: ApiService, private router:Router) { }
 
  

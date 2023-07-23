@@ -58,8 +58,9 @@ export class BrandsComponent implements OnInit {
     }
   
     this.loading = true;
-    this.api.postData('brand/add',{name: this.f.name.value},'post').subscribe(res => {
-      if(res['status'] == true) {
+    this.api.postData('brand/add',{name: this.f.name.value},'post').subscribe((res) => {
+      console.log(res);
+      if(res['status']) {
         this.api.loader('stop')
         this.submitted = false;
         this.api.showNotification('success', res['message']);
@@ -67,9 +68,13 @@ export class BrandsComponent implements OnInit {
         document.getElementById('close-brand')?.click();
         window.location.reload();
       }else{      
-        this.api.showNotification('error', res['message']);
-        this.api.loader('stop')
+        this.api.showNotification('error', res.message);
+        this.api.loader('stop');
       }
+    },
+    (error) => {
+      this.api.showNotification('error', error.message);
+      this.api.loader('stop');
     })
   }
 

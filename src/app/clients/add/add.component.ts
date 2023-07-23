@@ -28,7 +28,7 @@ export class AddClientComponent implements OnInit {
       state:["",[Validators.required]],
       city:["",[Validators.required]],
       approxCost:["",[Validators.required,Validators.pattern("^[0-9]+$")]],
-      refNumber: ["",[Validators.required,Validators.pattern('^[0-9]+$')]],
+      refNumber: [Math.floor(10000000000 * Math.random()),[Validators.required,Validators.pattern('^[0-9]+$')]],
       refBy:["",[Validators.required]],
       contactNumber:["",[Validators.required,Validators.pattern("^((\\+91-?)|0)?[0-9]{10}$")]]
     });

@@ -34,7 +34,7 @@ export class RegistrationComponent implements OnInit {
       unit: ["",Validators.required],
       mrpPrice:["",[Validators.required]],
       isGST:["",[Validators.required,]],
-      GSTAmount:["",[Validators.required, Validators.pattern("^[0-9]*$")]],
+      GSTAmount:[""],
       landing: ["",Validators.required],
       make1: ["",Validators.required],
       make2: ["",Validators.required],
