@@ -10,46 +10,77 @@ import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
   templateUrl: './registration.component.html',
   styleUrls: ['./registration.component.css']
 })
+
 export class RegistrationComponent implements OnInit {
   title: string | undefined;
   registrationForm:any;
+  CategoryList:any = [];
+  SubCategoryList:any = [];
   submited = false;
   brandlist:any = [];
+  modelNumberList:any = [];
   unitlist:any = [];
   isGSTFlag:any = false;
+  filename1:any="";
+  filename2:any="";
   public Editor = ClassicEditor;
+  filename3: any;
+  productId: any;
+  productData: any;
 
   constructor(private router: Router, 
     private api : ApiService, private route: ActivatedRoute, private fb: FormBuilder) { }
 
   ngOnInit(): void {
     this.title = this.route.snapshot.url[0].path;
+    this.productId = this.route.snapshot.params['id'];
     this.registrationForm = this.fb.group({
-      brandId: ["",Validators.required],
-      category: ["",[Validators.required, ]],
-      subcategory: ["",[Validators.required]],
+      brandId: [null,Validators.required],
+      categoryId: [null,[Validators.required ]],
+      subcategoryId: [null,[Validators.required]],
       modelNumber:["",[Validators.required]],
       description:["",[Validators.required]],
       itemRemark: ["",Validators.required],
+      productUSP:[""],
+      OEMcriteria:[""],
       unit: ["",Validators.required],
       mrpPrice:["",[Validators.required]],
-      isGST:["",[Validators.required,]],
+      isGST:["",[Validators.required]],
       GSTAmount:[""],
       landing: ["",Validators.required],
-      make1: ["",Validators.required],
-      make2: ["",Validators.required],
-      make3: ["",Validators.required],
-      make4: ["",Validators.required],
+      make1: [null,Validators.required],
+      make2: [null,Validators.required],
+      make3: [null,Validators.required],
+      make4: [null,Validators.required],
+      modelNumber_ref1:[null],
+      modelNumber_ref2:[null],
+      modelNumber_ref3:[null],
+      modelNumber_ref4:[null],
       documents:["",[Validators.required]],
+      bannerImg:[""],
       document_data:["",[Validators.required]],
       pdfFile:["",[Validators.required]],
       pdf_data:["",[Validators.required]],
       type:[""],
     });
     this.getbrandlist();
+    this.getCategoryList();
+    this.getSubCategoryList();
     this.getunitsMeasurment();
+    this.getAllModelNumber();
+    
  }
 get f() { return this.registrationForm.controls}
+
+  getAllModelNumber(){
+    this.api.fetchData('brand/getAllModelNumber', {}, "Get").subscribe((res:any) => {
+      if(res['status']  == true ) {
+        this.modelNumberList = res['data'];
+      }else {
+        this.modelNumberList =[]
+      }
+    })
+  }
 
   getbrandlist() {
     this.api.fetchData('brand/getAll', {}, "Get").subscribe((res:any) => {
@@ -57,6 +88,50 @@ get f() { return this.registrationForm.controls}
         this.brandlist = res['data'];
       }else {
         this.brandlist =[]
+      }
+    })
+  }
+
+  getCategoryList() {
+    this.api.fetchData('category/getAll', {}, "Get").subscribe((res:any) => {
+      if(res['status']  == true ) {
+        this.CategoryList = res['data'];
+      }else {
+        this.CategoryList =[]
+      }
+    })
+  }
+
+  getEditProductData() {
+    if (this.productId) {
+      // edit mode
+      this.title = 'Edit Product';
+      this.api.fetchData('product/getAll/:id', {}, "Get").subscribe((res:any) => {
+        if(res['status']  == true ) {
+          this.productData = res['data'];
+        }else {
+          this.productData =[]
+        }
+      })
+  }
+  }
+
+  changeCategoryEvent($event:any){
+    console.log($event);
+    this.getSubCategoryList($event.id);
+  }
+
+  getSubCategoryList(id:any = 0) {
+    let url = 'subcategory/getAll';
+    if(id > 0){
+      url+='/'+id; 
+    }
+    this.api.fetchData(url, {}, "Get").subscribe((res:any) => {
+      if(res['status']  == true ) {
+        this.SubCategoryList = res['data'];
+        console.log(this.SubCategoryList);
+      }else {
+        this.SubCategoryList =[]
       }
     })
   }
@@ -72,6 +147,8 @@ get f() { return this.registrationForm.controls}
   }
 
   register(){
+    console.log(this.registrationForm.value);
+    console.log(this.registrationForm.invalid);
     this.submited = true;
     if (this.registrationForm.invalid) {
       //  this.submited = false;
@@ -85,6 +162,7 @@ get f() { return this.registrationForm.controls}
     //  obj['role'] = 'admin';
     //  obj['mobile_number'] = parseInt(obj['mobile_number']);
     //  obj['aadhar_number'] = parseInt(obj['aadhar_number']);
+    console.log(obj);
     this.api.postData('product/add',obj,'post').subscribe(res => {
       if(res['status'] == 1) {
         this.api.loader('stop')
@@ -102,23 +180,36 @@ get f() { return this.registrationForm.controls}
 
   }
 
-  onfileUpload(event:any){
+  onfileUpload(event:any,filedName:string){
   // console.log(event.target.files[0]);
   let regex  =new RegExp('^.*\.(jpg|JPG|jpeg|JPEG|png|PNG)$')
   const reader = new FileReader();
   reader.readAsDataURL(event.target.files[0]);
   let type:any = event.target.files[0].type;
-      // console.log(event.target.files[0])
-  let filename:any = event.target.files[0].name;
-
+    // console.log(event.target.files[0])
+    if(filedName=="bannerImg"){
+      this.filename2 = event.target.files[0].name;
       reader.onload = (event:any) => {
-  
-      let data =  event.target['result'];
-      this.registrationForm.patchValue({
-        documents :data,
-        type:type
-      })
+        let data =  event.target['result'];
+        this.registrationForm.patchValue({
+          bannerImg :data,
+          type:type
+        })
       }
+    }
+    else{
+      this.filename1 = event.target.files[0].name;
+      reader.onload = (event:any) => {
+        let data =  event.target['result'];
+        this.registrationForm.patchValue({
+          documents :data,
+          type:type
+        })
+      }
+    }
+      
+    
+    
   }
 
   onpdffileUpload(event:any){
@@ -127,7 +218,7 @@ get f() { return this.registrationForm.controls}
     reader.readAsDataURL(event.target.files[0]);
     let type:any = event.target.files[0].type;
         // console.log(event.target.files[0])
-    let filename:any = event.target.files[0].name;
+    this.filename3 = event.target.files[0].name;
     reader.onload = (event:any) => {
       let data =  event.target['result'];
         this.registrationForm.patchValue({
@@ -145,9 +236,9 @@ get f() { return this.registrationForm.controls}
     }
   }
 
-  onDescriptionEditorChange({  editor }: any ) {
+  onDescriptionEditorChange({  editor }: any, fieldname:string ) {
     let descriptionData = editor.getData();
-    this.registrationForm.get('description').setValue(descriptionData);
+    this.registrationForm.get(fieldname).setValue(descriptionData);
     // this.registrationForm.description.setValue(data);
     console.log( this.registrationForm.value );
 }

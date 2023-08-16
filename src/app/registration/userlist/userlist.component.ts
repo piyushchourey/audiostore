@@ -35,13 +35,16 @@ export class UserlistComponent implements OnInit {
       pageLength: 10,
       destroy:true
     };
-    this.getuserlist()
+    this.getProductList();
   }
-  getuserlist() {
+  
+  getProductList() {
     this.api.fetchData('product/getAll', {}, "Get").subscribe((res:any) => {
-      if(res['status']  ==1 ) {
+      console.log( res['data']);
+      if(res['status']  == true ) {
         // this.dtOptions.destroy();
         this.productlist = res['data'];
+        console.log( this.productlist);
         this.dtTrigger.next(void 0);
       }else {
         this.productlist =[]
@@ -57,7 +60,7 @@ export class UserlistComponent implements OnInit {
       this.api.deleteData('product/remove/'+id, {}, "DELETE").subscribe((res:any) => {
         if(res['status'] == 1) {
           // this.userlist = res['data'];
-          this.getuserlist()
+          this.getProductList()
           this.api.showNotification('success','user deleted successfully.')
           document.getElementById('close-user')?.click();
         }else {

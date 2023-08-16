@@ -13,6 +13,19 @@ export const  sidebar_menu = [
       icon: 'fa-cogs',
       child:[]
     },
+    { 
+      name: "Category",
+      url:"/category",
+      role:["super_admin"],
+      icon: 'fa-cube',
+      child:[]
+    },
+    {
+      name: "Sub Category",
+      url:"/subcategory",
+      role:["super_admin"],
+      icon: 'fa-cubes',
+    },
     {
       name: "Products",
       role:["super_admin"],

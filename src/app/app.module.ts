@@ -29,6 +29,8 @@ import { AddClientComponent } from './clients/add/add.component';
 import { RateCalculationComponent } from './rate-calculation/rate-calculation.component'
 import { NgSelectModule } from '@ng-select/ng-select';
 import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
+import { CategoryComponent } from './category/category.component';
+import { SubcategoryComponent } from './subcategory/subcategory.component';
 
 const customNotifierOptions: NotifierOptions = {
   position: {
@@ -88,6 +90,8 @@ const customNotifierOptions: NotifierOptions = {
     ClientsComponent,
     AddClientComponent,
     RateCalculationComponent,
+    CategoryComponent,
+    SubcategoryComponent,
   ],
   imports: [
     BrowserModule,

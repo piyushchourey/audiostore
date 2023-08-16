@@ -36,23 +36,24 @@
         <!-- Default box -->
         <div class="card">
           <div class="card-body">
-            <table *ngIf="brandlist.length" datatable [dtOptions]="dtOptions" class="table table-striped projects">
+            <table *ngIf="SubCategoryList.length" datatable [dtOptions]="dtOptions" class="table table-striped projects">
                 <thead>
                     <tr>
                         <th >ID</th>
-                        <th >Brand Name</th>
+                        <th >Category Name</th>
+                        <th >Sub Category Name</th>
                         <th>Status</th>
                         <th class="text-center"> Action</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr *ngFor="let brand of brandlist; index as i;">
-                        <td>{{brand.id}}
-                        </td>
-                        <td>{{ brand.name | titlecase }}</td>
-                        <td><span>  {{ brand.status==true ? "Active" : "Deactive" }} </span></td>
+                    <tr *ngFor="let subcategory of SubCategoryList; index as i;">
+                        <td>{{subcategory.id}}</td>
+                        <td>{{ subcategory.category.name | titlecase }}</td>
+                        <td>{{ subcategory.name | titlecase }}</td>
+                        <td><span>  {{ subcategory.status==true ? "Active" : "Deactive" }} </span></td>
                         <td class="project-actions text-center">
-                           <a class="btn btn-danger btn-sm" (click)="selectedBrand = brand" href="javascript:void(0)" 
+                           <a class="btn btn-danger btn-sm" (click)="selectedCategory = subcategory" href="javascript:void(0)" 
                             data-toggle="modal" data-target="#staticBackdropDelete">
                                 <i class="fas fa-trash">
                                 </i>
@@ -76,16 +77,23 @@
     <div class="modal-dialog modal-sm">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title">Add</h4>
-                <button type="button" class="close close-brand" data-dismiss="modal" aria-label="Close">
+                <h4 class="modal-title">Create</h4>
+                <button type="button" class="close close-category" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">×</span>
                 </button>
             </div>
             <form [formGroup]="form" method="post" (ngSubmit)="onSubmit()">
                 <div class="modal-body">
-                    <label _ngcontent-mom-c60="" for="exampleInputEmail1">Brand Name</label>
+                  <label _ngcontent-mom-c60="" for="exampleInputEmail1">Choose Category</label>
+                    <div class="mb-3">
+                      <ng-select [items]="CategoryList" bindLabel="name" bindValue="id" [searchable] = "true" formControlName="categoryId" placeholder="Select Category"></ng-select>
+                        <div *ngIf="submitted && f.categoryId.errors" class="invalid-feedback">
+                        <span *ngIf="f.categoryId.errors.required" id="exampleInputEmail1-error">Please select a category</span>
+                        </div>
+                    </div>
+                    <label _ngcontent-mom-c60="" for="exampleInputEmail1">SubCategory Name</label>
                     <div class="input-group mb-3">
-                        <input type="text" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.name.errors }"  placeholder="Enter Brand Name" formControlName="name">
+                        <input type="text" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.name.errors }"  placeholder="Enter SubCategory Name" formControlName="name">
                         <div *ngIf="submitted && f.name.errors" class="invalid-feedback">
                         <span *ngIf="f.name.errors.required" id="exampleInputEmail1-error">Please enter a valid name</span>
                         </div>
@@ -102,21 +110,21 @@
 <!-- Modal -->
 <div class="modal fade" id="staticBackdropDelete" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog">
-      <div class="modal-content" *ngIf="selectedBrand">
+      <div class="modal-content" *ngIf="selectedCategory">
         <div class="modal-header">
-          <h5 class="modal-title" id="staticBackdropLabel">Delete Brand</h5>
+          <h5 class="modal-title" id="staticBackdropLabel">Delete sub category</h5>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="close-user">
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
         <div class="modal-body">
-          Are you sure to Delete the brand <b>{{selectedBrand.name}}</b> ? 
+          Are you sure to Delete the sub category <b>{{selectedCategory.name}}</b> ? 
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
           <button type="button" class="btn btn-custom"
-           (click)="deleteBrand(selectedBrand.id)">Delete</button>
+           (click)="deleteSubCategory(selectedCategory.id)">Delete</button>
         </div>
       </div>
     </div>
-  </div>
+</div>

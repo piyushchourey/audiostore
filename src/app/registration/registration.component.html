@@ -48,23 +48,21 @@
                 <div class="col-md-3">
                   <div class="form-group">
                     <label for="exampleInputEmail1">Category</label>
-                    <input type="text" class="form-control" id="category" 
-                    placeholder="Enter Category" formControlName="category"
-                    [ngClass]="{ 'is-invalid':  submited && f.category.errors }">
-                    <div *ngIf=" submited && f.category.errors " class="invalid-feedback">
-                      <div *ngIf="submited && f.category.errors.required">Category is required</div>
-                  </div>
-                
+                    <ng-select [items]="CategoryList" bindLabel="name" bindValue="id" 
+                    [searchable] = "true" [clearSearchOnAdd]="true" (change)="changeCategoryEvent($event)"
+                     formControlName="categoryId" placeholder="Select Category"></ng-select>
+                    <div *ngIf=" submited && f.categoryId.errors " class="invalid-feedback">
+                      <div *ngIf="submited && f.categoryId.errors.required">Category is required</div>
+                    </div>
                   </div>
                 </div>
                 <div class="col-md-3">
                   <div class="form-group">
                     <label for="exampleInputEmail1">Sub category</label>
-                    <input type="email" class="form-control" id="exampleInputEmail1"
-                    placeholder="Enter subcategory"formControlName="subcategory"
-                    [ngClass]="{ 'is-invalid':  submited && f.subcategory.errors }">
-                    <div *ngIf=" submited && f.subcategory.errors " class="invalid-feedback">
-                      <div *ngIf="submited && (f.subcategory.errors.required ||  f.subcategory.errors.subcategory)">Subcategory is required</div>
+                    <ng-select [items]="SubCategoryList" bindLabel="name" bindValue="id" [searchable] = "true" formControlName="subcategoryId" placeholder="Select Sub Category"></ng-select>
+                    
+                    <div *ngIf=" submited && f.subcategoryId.errors " class="invalid-feedback">
+                      <div *ngIf="submited && (f.subcategoryId.errors.required)">Subcategory is required</div>
                   </div>
                  </div>
                 </div>
@@ -150,6 +148,7 @@
                  </div>
                 </div>
               </div>
+
               <div class="row">
                 <div class="col-md-3">
                   <div class="form-group">
@@ -209,15 +208,53 @@
                  </div>
                 </div>
               </div>
+
+              <!-- Model number Ref-->
+              <div class="row">
+                <div class="col-md-3">
+                  <div class="form-group">
+                    <label for="exampleInputEmail1">Reference Model N0. 1</label>
+                    <ng-select  [ngClass]="{ 'is-invalid':  submited && f.modelNumber_ref1.errors }" [items]="modelNumberList" bindLabel="modelNumber" bindValue="modelNumber" [searchable] = "true" formControlName="modelNumber_ref1" placeholder="Select Model Number 1"></ng-select>
+                    <div *ngIf=" submited && f.modelNumber_ref1.errors " class="invalid-feedback">
+                      <div *ngIf="submited && f.modelNumber_ref1.errors.required">Make 1 is required</div>
+                  </div>
+                  </div>
+                </div>
+                <div class="col-md-3">
+                  <div class="form-group">
+                    <label for="exampleInputEmail1">Reference Model N0. 2</label>
+                    <ng-select  [ngClass]="{ 'is-invalid':  submited && f.modelNumber_ref2.errors }" [items]="modelNumberList" bindLabel="modelNumber" bindValue="modelNumber" [searchable] = "true" formControlName="modelNumber_ref2" placeholder="Select Model Number 2"></ng-select>
+                    <div *ngIf=" submited && f.modelNumber_ref2.errors " class="invalid-feedback">
+                      <div *ngIf="submited && f.modelNumber_ref2.errors.required">Make 2 is required</div>
+                  </div>
+                  </div>
+                </div>
+                <div class="col-md-3">
+                  <div class="form-group">
+                    <label for="exampleInputEmail1">Reference Model N0. 3</label>
+                    <ng-select  [ngClass]="{ 'is-invalid':  submited && f.modelNumber_ref3.errors }" [items]="modelNumberList" bindLabel="modelNumber" bindValue="modelNumber" [searchable] = "true" formControlName="modelNumber_ref3" placeholder="Select Model Number 3"></ng-select>
+                    <div *ngIf=" submited && f.modelNumber_ref3.errors " class="invalid-feedback">
+                      <div *ngIf="submited && f.modelNumber_ref3.errors.required">Make 3 is required</div>
+                  </div>
+                  </div>
+                </div>
+                <div class="col-md-3">
+                  <div class="form-group">
+                    <label for="exampleInputEmail1">Reference Model N0. 4</label>
+                    <ng-select  [ngClass]="{ 'is-invalid':  submited && f.modelNumber_ref4.errors }" [items]="modelNumberList" bindLabel="modelNumber" bindValue="modelNumber" [searchable] = "true" formControlName="modelNumber_ref4" placeholder="Select Model Number 4"></ng-select>
+                    <div *ngIf=" submited && f.modelNumber_ref4.errors " class="invalid-feedback">
+                      <div *ngIf="submited && f.modelNumber_ref4.errors.required">Make 4 is required</div>
+                  </div>
+                  </div>
+                </div>
+              </div>
+              <!-- Model number Ref-->
+
               <div class="row">
                 <div class="col-md-6">
                   <div class="form-group">
-                      <label>Description</label>
-                      <ckeditor [editor]="Editor" (change)="onDescriptionEditorChange($event)" data="<p>Hello, world!</p>"></ckeditor>
-                      <!-- <textarea class="form-control ckeditor" rows="3" placeholder="Enter Description here
-                      "formControlName="description"
-                      [ngClass]="{ 'is-invalid':  submited && f.description.errors }" rows="5" cols="10"></textarea> -->
-                      <!-- <ckeditor [editor]="Editor" data="<p>Hello, world!</p>"></ckeditor> -->
+                      <label>BOQ Spacs</label>
+                      <ckeditor [editor]="Editor" (change)="onDescriptionEditorChange($event,'description')" data="<p>Hello, world!</p>"></ckeditor>
                       <div *ngIf=" submited && f.description.errors " class="invalid-feedback">
                         <div *ngIf="submited && f.description.errors.required">Description is required</div>
                     </div>
@@ -225,7 +262,7 @@
                 </div>
                 <div class="col-md-6">
                   <div class="form-group">
-                    <label>Item Remark</label>
+                    <label>Technical Compliances</label>
                     <ckeditor [editor]="Editor" (change)="onRemarkChange($event)" data="<p>Hello, world!</p>"></ckeditor>
                     <!-- <textarea class="form-control" rows="3" placeholder="Enter Item Remark here
                     "formControlName="itemRemark"
@@ -237,17 +274,37 @@
                 </div>
               </div>
               <div class="row">
+                <div class="col-md-6">
+                  <div class="form-group">
+                      <label>Product USP</label>
+                      <ckeditor [editor]="Editor" (change)="onDescriptionEditorChange($event,'productUSP')" data="<p>Hello, world!</p>"></ckeditor>
+                      <div *ngIf=" submited && f.productUSP.errors " class="invalid-feedback">
+                        <div *ngIf="submited && f.productUSP.errors.required">Product USP is required</div>
+                    </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label>OEM Criteria</label>
+                    <ckeditor [editor]="Editor" (change)="onDescriptionEditorChange($event,'OEMcriteria')" data="<p>Hello, world!</p>"></ckeditor>
+                    <div *ngIf=" submited && f.itemRemark.errors " class="invalid-feedback">
+                      <div *ngIf="submited && f.itemRemark.errors.required">OEM Criteria is required</div>
+                  </div>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
                 <div class="col-md-4">
                     <div class="form-group">
                       <label for="exampleInputPassword1">Upload Photos</label>
                       <div class="custom-file">
                         <input type="file" class="custom-file-input" 
-                        id="customFile"formControlName="document_data" (change)="onfileUpload($event)"
+                        id="customFile"formControlName="document_data" (change)="onfileUpload($event,'documents')"
                         [ngClass]="{ 'is-invalid':  submited && f.document_data.errors }">
                         <div *ngIf=" submited && f.document_data.errors " class="invalid-feedback">
                           <div *ngIf="submited && f.document_data.errors.required">Photo is required</div>
                       </div>
-                        <label class="custom-file-label" for="customFile">Select Photo</label>
+                        <label class="custom-file-label" for="customFile"> {{ filename1 ? filename1 : 'Select Photo'   }}</label>
                       </div>
                     </div>
                 </div>
@@ -261,10 +318,24 @@
                       <div *ngIf=" submited && f.pdf_data.errors " class="invalid-feedback">
                         <div *ngIf="submited && f.pdf_data.errors.required">PDF is required</div>
                     </div>
-                      <label class="custom-file-label" for="customFile">Select PDF</label>
+                      <label class="custom-file-label" for="customFile">{{ filename3 ? filename3 : 'Select PDF'   }}</label>
                     </div>
                   </div>
               </div>
+              <div class="col-md-4">
+                <div class="form-group">
+                  <label for="exampleInputPassword1">Product PDF/Banner Image</label>
+                  <div class="custom-file">
+                    <input type="file" class="custom-file-input" 
+                    id="customFile"formControlName="document_data" (change)="onfileUpload($event,'bannerImg')"
+                    [ngClass]="{ 'is-invalid':  submited && f.document_data.errors }">
+                    <div *ngIf=" submited && f.document_data.errors " class="invalid-feedback">
+                      <div *ngIf="submited && f.document_data.errors.required">Photo is required</div>
+                  </div>
+                    <label class="custom-file-label" for="customFile">{{ filename2 ? filename2 : 'Select Photo'   }}</label>
+                  </div>
+                </div>
+            </div>
               </div>
             </div>
             <!-- /.card-body -->

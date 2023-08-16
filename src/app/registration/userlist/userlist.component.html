@@ -46,7 +46,6 @@
                         <th>MRP Price</th>
                         <th>GST Amount</th>
                         <th  class="text-center">Landing</th>
-                        <th  class="text-center">Image</th>
                         <th class="text-center"> Action</th>
                     </tr>
                 </thead>
@@ -54,39 +53,37 @@
                     <tr *ngFor="let product of productlist; index as i;">
                         <td>{{product.id}}</td>
                         <td>
-                            <a>{{ product.brand.name }}</a><br>
+                            <a>{{ product.brand ? product.brand.name : 'N/A'  }}</a><br>
                             <small class="{{ product.status==true ? 'right badge badge-succcess' : 'right badge badge-danger' }}">{{ product.status==true ? 'Active' : 'inactive' }}</small>
                         </td>
                         <td>
-                            <span>{{ product.category }}</span>
+                            <span>{{ product.category ? product.category.name : 'N/A'  }}</span>
                         </td>
                         <td >
-                            <span>{{ product.subcategory }}</span>
+                            <span>{{ product.subcategory ? product.subcategory.name : 'N/A' }}</span>
                         </td>
                         <td >
                           <span>{{ product.modelNumber }}</span>
                         </td>
                         <td >
-                        <span><i class="fas fa-inr" aria-hidden="true"></i>{{ product.mrpPrice }}</span>
+                        <span><i class="fas fa-rupee" aria-hidden="true"></i>{{ product.mrpPrice }}</span>
                         </td>
                         <td >
-                          <span>{{ product.GSTAmount }}</span>
+                          <span> <i class="fas fa-rupee"></i>{{ product.GSTAmount }}</span>
                         </td>
                         <td >
-                            <span><i class="fa fa-inr" aria-hidden="true"></i>{{ product.landing }}</span>
-                        </td>
-                        <td>
-                            <span *ngIf="product.documents">
-                              <a href="{{ product.documents }}" target="_blank">Image</a>
-                            </span>
+                            <span><i class="fa fa-rupee" aria-hidden="true"></i>{{ product.landing }}</span>
                         </td>
                         <td class="project-actions text-center">
-                            <a class="btn btn-danger btn-sm" (click)="selectedUser = product" href="javascript:void(0)" 
+                          <a class="btn btn-warning btn-sm" title="Edit Product" href="product/edit/{{ product.id }}">
+                              <i class="fas fa-pen"></i>
+                          </a>
+
+                          <a class="btn btn-danger btn-sm" title="Delete Product" (click)="selectedUser = product" href="javascript:void(0)" 
                             data-toggle="modal" data-target="#staticBackdrop">
-                                <i class="fas fa-trash">
-                                </i>
-                            </a>
-                            <a class="btn btn-primary btn-sm" (click)="viewDetails(product)"  href="javascript:void(0)" 
+                                <i class="fas fa-trash"></i>
+                          </a>
+                            <a class="btn btn-primary btn-sm" title="View Product" (click)="viewDetails(product)"  href="javascript:void(0)" 
                             data-toggle="modal" data-target="#detailsPopup">
                                 <i class="fas fa-eye">
                                 </i>
@@ -123,7 +120,7 @@
         </button>
       </div>
       <div class="modal-body">
-        Are you sure to Delete the product {{selectedUser.brand_name}} ? This action can not be reverted.
+        Are you sure to Delete the product {{ selectedUser.brand_name ? selectedUser.brand_name : 'N/A' }} ? This action can not be reverted.
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -173,11 +170,11 @@
                   </tr>
                   <tr>
                     <th>Category</th>
-                    <td>{{ productDetails.category }}</td>
+                    <td>{{ productDetails.category ? productDetails.category.name : 'N/A' }}</td>
                   </tr>
                   <tr>
                     <th>Sub Category</th>
-                    <td>{{ productDetails.subcategory }}</td>
+                    <td>{{ productDetails.subcategory ? productDetails.subcategory.name : 'N/A' }}</td>
                   </tr>
                   <tr>
                     <th>GST Amount</th>
@@ -185,7 +182,10 @@
                   </tr>
                   <tr>
                     <th>PDF File</th>
-                    <td><a href="productDetails.pdfFile"><i class="fas fa-file-pdf" aria-hidden="true"></i></a></td>
+                    <td><a [href]="productDetails.pdfFile" target="_blank" rel="noopener noreferrer">
+                      <i class="fas fa-file-pdf" aria-hidden="true"></i>
+                    </a>
+                    </td>
                   </tr>
                 </table>
               </div>
@@ -198,6 +198,10 @@
                       role="tab" aria-controls="product-desc" aria-selected="true">Description</a>
                   <a class="nav-item nav-link" id="product-comments-tab" data-toggle="tab" href="#product-comments"
                       role="tab" aria-controls="product-comments" aria-selected="false">Item Remark</a>
+                  <a class="nav-item nav-link" id="product-productUSP-tab" data-toggle="tab" href="#product-productUSP"
+                      role="tab" aria-controls="product-comments" aria-selected="false">Product USP</a>
+                  <a class="nav-item nav-link" id="product-OEMcriteria-tab" data-toggle="tab" href="#product-OEMcriteria"
+                      role="tab" aria-controls="product-comments" aria-selected="false">OEM Criteria</a>
               </div>
           </nav>
           <div class="tab-content p-3" id="nav-tabContent">
@@ -207,6 +211,12 @@
                 </div>
               <div class="tab-pane fade" id="product-comments" role="tabpanel" aria-labelledby="product-comments-tab">
                 <div [innerHTML]="productDetails.itemRemark"></div>
+              </div>
+              <div class="tab-pane fade" id="product-productUSP" role="tabpanel" aria-labelledby="product-productUSP-tab">
+                <div [innerHTML]="productDetails.productUSP"></div>
+              </div>
+              <div class="tab-pane fade" id="product-OEMcriteria" role="tabpanel" aria-labelledby="product-OEMcriteria-tab">
+                <div [innerHTML]="productDetails.OEMcriteria"></div>
               </div>
           </div>
       </div>
