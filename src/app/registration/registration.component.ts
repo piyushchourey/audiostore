@@ -56,19 +56,22 @@ export class RegistrationComponent implements OnInit {
       modelNumber_ref2:[null],
       modelNumber_ref3:[null],
       modelNumber_ref4:[null],
-      documents:["",[Validators.required]],
+      documents:[""],
       bannerImg:[""],
-      document_data:["",[Validators.required]],
-      pdfFile:["",[Validators.required]],
-      pdf_data:["",[Validators.required]],
+      document_data:[""],
+      pdfFile:[""],
+      pdf_data:[""],
       type:[""],
+      productId:[""],
     });
     this.getbrandlist();
     this.getCategoryList();
     this.getSubCategoryList();
     this.getunitsMeasurment();
     this.getAllModelNumber();
-    
+    if(this.productId){
+      this.getEditProductData();
+    }
  }
 get f() { return this.registrationForm.controls}
 
@@ -106,9 +109,36 @@ get f() { return this.registrationForm.controls}
     if (this.productId) {
       // edit mode
       this.title = 'Edit Product';
-      this.api.fetchData('product/getAll/:id', {}, "Get").subscribe((res:any) => {
+      this.api.fetchData('product/getAll/'+this.productId, {}, "Get").subscribe((res:any) => {
         if(res['status']  == true ) {
-          this.productData = res['data'];
+          this.productData = res['data'][0];
+          console.log("Product id=",this.productData.id);
+          this.registrationForm.get('brandId').setValue(this.productData.brandId);
+          this.registrationForm.get('brandId').setValue(this.productData.brandId);
+          this.registrationForm.get('categoryId').setValue(this.productData.categoryId);
+          this.registrationForm.get('subcategoryId').setValue(this.productData.subcategoryId);
+          this.registrationForm.get('modelNumber').setValue(this.productData.modelNumber);
+          this.registrationForm.get('description').setValue(this.productData.description);
+          this.registrationForm.get('itemRemark').setValue(this.productData.itemRemark);
+          this.registrationForm.get('productUSP').setValue(this.productData.productUSP);
+          this.registrationForm.get('OEMcriteria').setValue(this.productData.OEMcriteria);
+          this.registrationForm.get('unit').setValue(this.productData.unit);
+          this.registrationForm.get('mrpPrice').setValue(this.productData.mrpPrice);
+          this.registrationForm.get('isGST').setValue(this.productData.isGST);
+          this.registrationForm.get('GSTAmount').setValue(this.productData.GSTAmount);
+          this.registrationForm.get('landing').setValue(this.productData.landing);
+          this.registrationForm.get('make1').setValue(+this.productData.make1);
+          this.registrationForm.get('make2').setValue(+this.productData.make2);
+          this.registrationForm.get('make3').setValue(+this.productData.make3);
+          this.registrationForm.get('make4').setValue(+this.productData.make4);
+          this.registrationForm.get('modelNumber_ref1').setValue(this.productData.modelNumber_ref1);
+          this.registrationForm.get('modelNumber_ref2').setValue(this.productData.modelNumber_ref2);
+          this.registrationForm.get('modelNumber_ref3').setValue(this.productData.modelNumber_ref3);
+          this.registrationForm.get('modelNumber_ref4').setValue(this.productData.modelNumber_ref4);
+          this.filename1= this.productData.documents;
+          this.filename2= this.productData.pdfFile;
+          this.filename3= this.productData.bannerImg;
+          this.registrationForm.get('productId').setValue(this.productData.id);
         }else {
           this.productData =[]
         }
@@ -176,7 +206,7 @@ get f() { return this.registrationForm.controls}
         // this.updateFormdata({})
         
       }
-      })
+    })
 
   }
 

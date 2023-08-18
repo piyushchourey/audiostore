@@ -32,9 +32,9 @@
                 <p>Total Products</p>
               </div>
               <div class="icon">
-                <i class="ion ion-bag"></i>
+                <i class="ion ion-list"></i>
               </div>
-              <a routerLink="/township/list"  class="small-box-footer">More info <i class="fas fa-flag-checkered"></i></a>
+              <a routerLink="/products"  class="small-box-footer">More info <i class="fas fa-flag-checkered"></i></a>
             </div>
           </div>
           <!-- ./col -->
@@ -44,12 +44,12 @@
               <div class="inner">
                 <h3 *ngIf="bardata&&bardata.total_brokers.length > 0">{{bardata.total_brokers[0].count}}</h3>
 
-                <p>Total Tenders</p>
+                <p>Total Clients</p>
               </div>
               <div class="icon">
-                <i class="ion ion-stats-bars"></i>
+                <i class="ion ion-user"></i>
               </div>
-              <a routerLink="/broker/list" class="small-box-footer">More info <i class="fas fa-users"></i></a>
+              <a routerLink="/clients" class="small-box-footer">More info <i class="fas fa-users"></i></a>
             </div>
           </div>
           <!-- ./col -->

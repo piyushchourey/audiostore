@@ -36,10 +36,6 @@
                     <label for="exampleInputEmail1">Brand Name</label>
                     <ng-select [items]="brandlist" bindLabel="name" bindValue="id" [searchable] = "true" formControlName="brandId" placeholder="Select Product"></ng-select>
 
-                    <!-- <select formControlName="brandId" class="form-control select2" style="width: 100%;" [ngClass]="{ 'is-invalid':  submited && f.brandId.errors }">
-                      <option value="">Select Brand Name</option>
-                      <option *ngFor="let brand of brandlist" value="{{brand.id}}">{{brand.name | titlecase}}</option>
-                    </select> -->
                     <div *ngIf=" submited && f.brandId.errors " class="invalid-feedback">
                       <div *ngIf="submited && f.brandId.errors.required">Brand name is required</div>
                   </div>
@@ -254,7 +250,7 @@
                 <div class="col-md-6">
                   <div class="form-group">
                       <label>BOQ Spacs</label>
-                      <ckeditor [editor]="Editor" (change)="onDescriptionEditorChange($event,'description')" data="<p>Hello, world!</p>"></ckeditor>
+                      <ckeditor [editor]="Editor" formControlName="description" data="<p>Hello, world!</p>"></ckeditor>
                       <div *ngIf=" submited && f.description.errors " class="invalid-feedback">
                         <div *ngIf="submited && f.description.errors.required">Description is required</div>
                     </div>
@@ -263,7 +259,7 @@
                 <div class="col-md-6">
                   <div class="form-group">
                     <label>Technical Compliances</label>
-                    <ckeditor [editor]="Editor" (change)="onRemarkChange($event)" data="<p>Hello, world!</p>"></ckeditor>
+                    <ckeditor [editor]="Editor" formControlName="itemRemark" data="<p>Hello, world!</p>"></ckeditor>
                     <!-- <textarea class="form-control" rows="3" placeholder="Enter Item Remark here
                     "formControlName="itemRemark"
                     [ngClass]="{ 'is-invalid':  submited && f.itemRemark.errors }" rows="5" cols="10"></textarea> -->
@@ -277,7 +273,7 @@
                 <div class="col-md-6">
                   <div class="form-group">
                       <label>Product USP</label>
-                      <ckeditor [editor]="Editor" (change)="onDescriptionEditorChange($event,'productUSP')" data="<p>Hello, world!</p>"></ckeditor>
+                      <ckeditor [editor]="Editor" formControlName="productUSP" data="<p>Hello, world!</p>"></ckeditor>
                       <div *ngIf=" submited && f.productUSP.errors " class="invalid-feedback">
                         <div *ngIf="submited && f.productUSP.errors.required">Product USP is required</div>
                     </div>
@@ -286,7 +282,7 @@
                 <div class="col-md-6">
                   <div class="form-group">
                     <label>OEM Criteria</label>
-                    <ckeditor [editor]="Editor" (change)="onDescriptionEditorChange($event,'OEMcriteria')" data="<p>Hello, world!</p>"></ckeditor>
+                    <ckeditor [editor]="Editor" formControlName="OEMcriteria" data="<p>Hello, world!</p>"></ckeditor>
                     <div *ngIf=" submited && f.itemRemark.errors " class="invalid-feedback">
                       <div *ngIf="submited && f.itemRemark.errors.required">OEM Criteria is required</div>
                   </div>
@@ -299,7 +295,7 @@
                       <label for="exampleInputPassword1">Upload Photos</label>
                       <div class="custom-file">
                         <input type="file" class="custom-file-input" 
-                        id="customFile"formControlName="document_data" (change)="onfileUpload($event,'documents')"
+                        id="customFile" formControlName="document_data" (change)="onfileUpload($event,'documents')"
                         [ngClass]="{ 'is-invalid':  submited && f.document_data.errors }">
                         <div *ngIf=" submited && f.document_data.errors " class="invalid-feedback">
                           <div *ngIf="submited && f.document_data.errors.required">Photo is required</div>
@@ -313,7 +309,7 @@
                     <label for="exampleInputPassword1">Upload Brochure(.pdf)</label>
                     <div class="custom-file">
                       <input type="file" class="custom-file-input" 
-                      id="customFile"formControlName="pdf_data" (change)="onpdffileUpload($event)"
+                      id="customFile" formControlName="pdf_data" (change)="onpdffileUpload($event)"
                       [ngClass]="{ 'is-invalid':  submited && f.pdf_data.errors }">
                       <div *ngIf=" submited && f.pdf_data.errors " class="invalid-feedback">
                         <div *ngIf="submited && f.pdf_data.errors.required">PDF is required</div>
@@ -327,10 +323,10 @@
                   <label for="exampleInputPassword1">Product PDF/Banner Image</label>
                   <div class="custom-file">
                     <input type="file" class="custom-file-input" 
-                    id="customFile"formControlName="document_data" (change)="onfileUpload($event,'bannerImg')"
-                    [ngClass]="{ 'is-invalid':  submited && f.document_data.errors }">
-                    <div *ngIf=" submited && f.document_data.errors " class="invalid-feedback">
-                      <div *ngIf="submited && f.document_data.errors.required">Photo is required</div>
+                    id="customFile" formControlName="bannerImg" (change)="onfileUpload($event,'bannerImg')"
+                    [ngClass]="{ 'is-invalid':  submited && f.bannerImg.errors }">
+                    <div *ngIf=" submited && f.bannerImg.errors " class="invalid-feedback">
+                      <div *ngIf="submited && f.bannerImg.errors.required">Photo is required</div>
                   </div>
                     <label class="custom-file-label" for="customFile">{{ filename2 ? filename2 : 'Select Photo'   }}</label>
                   </div>
@@ -340,6 +336,7 @@
             </div>
             <!-- /.card-body -->
             <div class="card-footer">
+              <input type="hidden" formControlName="productId">
                <button type="submit" class="btn btn-custom">Save Product</button>
             </div>
           </form>

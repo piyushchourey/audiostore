@@ -37,7 +37,7 @@ export class UserlistComponent implements OnInit {
     };
     this.getProductList();
   }
-  
+
   getProductList() {
     this.api.fetchData('product/getAll', {}, "Get").subscribe((res:any) => {
       console.log( res['data']);
@@ -110,6 +110,19 @@ export class UserlistComponent implements OnInit {
            this.showerror = false;
          }
        })
+  }
+
+  copyToClipboard(el: HTMLDivElement) {
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(el.innerText).then(() => {
+        this.api.showNotification('success', 'Copied to Clipboard');
+      }, (error) => {
+        this.api.showNotification('error', error.message);
+      });
+    } else {
+      this.api.showNotification('error', 'Browser do not support Clipboard API');
+    }
+
   }
 
   viewDetails(product:any) {
