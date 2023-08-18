@@ -112,7 +112,6 @@ get f() { return this.registrationForm.controls}
       this.api.fetchData('product/getAll/'+this.productId, {}, "Get").subscribe((res:any) => {
         if(res['status']  == true ) {
           this.productData = res['data'][0];
-          console.log("Product id=",this.productData.id);
           this.registrationForm.get('brandId').setValue(this.productData.brandId);
           this.registrationForm.get('brandId').setValue(this.productData.brandId);
           this.registrationForm.get('categoryId').setValue(this.productData.categoryId);
@@ -192,7 +191,6 @@ get f() { return this.registrationForm.controls}
     //  obj['role'] = 'admin';
     //  obj['mobile_number'] = parseInt(obj['mobile_number']);
     //  obj['aadhar_number'] = parseInt(obj['aadhar_number']);
-    console.log(obj);
     this.api.postData('product/add',obj,'post').subscribe(res => {
       if(res['status'] == 1) {
         this.api.loader('stop')
